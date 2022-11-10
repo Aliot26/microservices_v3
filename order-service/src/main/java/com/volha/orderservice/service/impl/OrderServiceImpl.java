@@ -3,6 +3,7 @@ package com.volha.orderservice.service.impl;
 import com.volha.orderservice.dto.InventoryResponse;
 import com.volha.orderservice.dto.OrderLineItemsDto;
 import com.volha.orderservice.dto.OrderRequest;
+import com.volha.orderservice.event.OrderPlacedEvent;
 import com.volha.orderservice.model.Order;
 import com.volha.orderservice.model.OrderLineItems;
 import com.volha.orderservice.repository.OrderRepository;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -28,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
     private final Tracer tracer;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     @Override
     public String placeOrder(OrderRequest orderRequest) {
@@ -57,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
             boolean allProductsInStock = Arrays.stream(inventoryResponsesArray).allMatch(InventoryResponse::isInStock);
             if (allProductsInStock) {
                 orderRepository.save(order);
+                kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
                 return "Order placed successfully";
             } else throw new IllegalArgumentException("Product is not in stock, please try again later");
         } finally {
