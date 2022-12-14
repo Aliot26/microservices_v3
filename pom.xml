@@ -26,8 +26,8 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-cloud.version>2021.0.4</spring-cloud.version>
     </properties>
@@ -67,6 +67,18 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:17.0.5_8-jre</image>
+                    </from>
+                    <to><image>registry.hub.docker.com/aliot/${project.artifactId}</image></to>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
 </project>

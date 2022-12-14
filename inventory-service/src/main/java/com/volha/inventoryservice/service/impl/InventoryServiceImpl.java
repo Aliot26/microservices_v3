@@ -19,7 +19,7 @@ public class InventoryServiceImpl implements InventoryService {
 
 
     @Transactional(readOnly = true)
-    @SneakyThrows //don't us it in production
+//    @SneakyThrows //don't us it in production
     public List<InventoryResponse> isInStock(List<String> skuCode) {
         log.info("Checking Inventory");
 //        log.info("Wait started");
