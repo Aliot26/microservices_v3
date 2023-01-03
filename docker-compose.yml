@@ -2,43 +2,45 @@
 version: '3'
 services:
   ## MySQL Docker Compose Config
-  mysql-order:
-    container_name: mysql-order
-    image: mysql
-    environment:
-      MYSQL_DATABASE: 'order_service'
-      MYSQL_ROOT_PASSWORD: '12341234'
-    volumes:
-      - ./mysql-order:/data/mysql/conf.d/**
-    expose:
-      - "3307"
-    ports:
-      - '3307:3306'
-    restart: always
-
-  mysql-inventory:
-    container_name: mysql-inventory
-    image: mysql
-    environment:
-      MYSQL_DATABASE: 'inventory_service'
-      MYSQL_ROOT_PASSWORD: '12341234'
-    volumes:
-      - ./mysql-inventory:/data/mysql/conf.d/**
-    ports:
-      - "3308:3306"
-    restart: always
-
-  ## Mongo Docker Compose Config
-  mongo:
-    container_name: mongo
-    image: mongo:4.4.14-rc0-focal
-    restart: always
-    ports:
-      - "27018:27018"
-    expose:
-      - "27018"
-    volumes:
-      - ./mongo-data:/data/db
+#  mysql-order:
+#    container_name: mysql-order
+#    image: mysql-order
+#    environment:
+#      MYSQL_DATABASE: 'order_service'
+#      MYSQL_ROOT_PASSWORD: '12341234'
+#      MYSQL_PASSWORD: '12341234'
+#    volumes:
+#      - ./mysql-order:/data/mysql/conf.d/**
+#    expose:
+#      - "3307"
+#    ports:
+#      - '3307:3306'
+#    restart: always
+#
+#  mysql-inventory:
+#    container_name: mysql-inventory
+#    image: mysql-inventory
+#    environment:
+#      MYSQL_DATABASE: 'inventory_service'
+#      MYSQL_ROOT_PASSWORD: '12341234'
+#      MYSQL_PASSWORD: '12341234'
+#    volumes:
+#      - ./mysql-inventory:/data/mysql/conf.d/**
+#    ports:
+#      - "3308:3306"
+#    restart: always
+#
+#  ## Mongo Docker Compose Config
+#  mongo:
+#    container_name: mongo
+#    image: mongo:4.4.14-rc0-focal
+#    restart: always
+#    ports:
+#      - "27018:27018"
+#    expose:
+#      - "27018"
+#    volumes:
+#      - ./mongo-data:/data/db
 
   ## Keycloak Config with Mysql database
   keycloak-mysql:
@@ -102,76 +104,76 @@ services:
       - "9411:9411"
 
   ## Eureka Server
-  discovery-server:
-    image: aliot/discovery-server:latest
-    container_name: discovery-server
-    ports:
-      - "8761:8761"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - zipkin
-
-  api-gateway:
-    image:  aliot/api-gateway:latest
-    container_name: api-gateway
-    ports:
-      - "8181:8080"
-    expose:
-      - "8181"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
-    depends_on:
-      - zipkin
-      - discovery-server
-      - keycloak
-
-  ## Product-Service Docker Compose Config
-  product-service:
-    container_name: product-service
-    image: aliot/product-service:latest
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - mongo
-      - discovery-server
-      - api-gateway
-
-  ## Order-Service Docker Compose Config
-  order-service:
-    container_name: order-service
-    image: aliot/order-service:latest
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/order_service
-    depends_on:
-      - mysql-order
-      - broker
-      - zipkin
-      - discovery-server
-      - api-gateway
-
-  ## Inventory-Service Docker Compose Config
-  inventory-service:
-    container_name: inventory-service
-    image: aliot/inventory-service:latest
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/inventory_service
-    depends_on:
-      - mysql-inventory
-      - discovery-server
-      - api-gateway
-
-  ## Notification-Service Docker Compose Config
-  notification-service:
-    container_name: notification-service
-    image: aliot/notification-service:latest
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - zipkin
-      - broker
-      - discovery-server
-      - api-gateway
+#  discovery-server:
+#    image: aliot/discovery-server:latest
+#    container_name: discovery-server
+#    ports:
+#      - "8761:8761"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - zipkin
+#
+#  api-gateway:
+#    image:  aliot/api-gateway:latest
+#    container_name: api-gateway
+#    ports:
+#      - "8181:8080"
+#    expose:
+#      - "8181"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
+#    depends_on:
+#      - zipkin
+#      - discovery-server
+#      - keycloak
+#
+#  ## Product-Service Docker Compose Config
+#  product-service:
+#    container_name: product-service
+#    image: aliot/product-service:latest
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - mongo
+#      - discovery-server
+#      - api-gateway
+#
+#  ## Order-Service Docker Compose Config
+#  order-service:
+#    container_name: order-service
+#    image: aliot/order-service:latest
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/order_service
+#    depends_on:
+#      - mysql-order
+#      - broker
+#      - zipkin
+#      - discovery-server
+#      - api-gateway
+#
+#  ## Inventory-Service Docker Compose Config
+#  inventory-service:
+#    container_name: inventory-service
+#    image: aliot/inventory-service:latest
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/inventory_service
+#    depends_on:
+#      - mysql-inventory
+#      - discovery-server
+#      - api-gateway
+#
+#  ## Notification-Service Docker Compose Config
+#  notification-service:
+#    container_name: notification-service
+#    image: aliot/notification-service:latest
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    depends_on:
+#      - zipkin
+#      - broker
+#      - discovery-server
+#      - api-gateway
