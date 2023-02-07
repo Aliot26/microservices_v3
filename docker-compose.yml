@@ -152,7 +152,9 @@ services:
     image: aliot/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/order_service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3306/order_service
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=12341234
     depends_on:
       - mysql-order
       - broker
@@ -166,7 +168,9 @@ services:
     image: aliot/inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/inventory_service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-inventory:3306/inventory_service
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=12341234
     depends_on:
       - mysql-inventory
       - discovery-server
