@@ -13,7 +13,7 @@ public class NotificationServiceApplication {
     }
 
     @KafkaListener(topics = "notificationTopic")
-    public void handleNotification(OrderPlacedEvent orderPlacedEvent){
+    public void handleNotification(OrderPlacedEvent orderPlacedEvent) {
 
         log.info("Received notification for Order {}", orderPlacedEvent.getOrderNumber());
     }
